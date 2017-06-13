@@ -36,4 +36,4 @@ def lookat(eye, target, up=(0.0, 0.0, 1.0)):
 
 
 def create_mvp(proj, view):
-    return np.transpose(proj @ view).astype(np.float32)
+    return np.transpose(proj @ view).astype('float32').tobytes()
