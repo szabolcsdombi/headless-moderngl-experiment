@@ -21,7 +21,7 @@ python main.py
 
 ## The output
 
-[![example](https://raw.githubusercontent.com/cprogrammer1994/Headless-rendering-with-python/master/data/example.png)](https://github.com/cprogrammer1994/Headless-rendering-with-python/blob/master/data/example.png)
+[![example](https://raw.githubusercontent.com/cprogrammer1994/Headless-rendering-with-python/master/data/sitting.png)](https://github.com/cprogrammer1994/Headless-rendering-with-python/blob/master/data/sitting.png)
 
 ## The vertex shaders
 
@@ -84,7 +84,7 @@ import matrices
 
 # Data files
 
-vertex_data = obj.load('data/dummy.obj')
+vertex_data = obj.load('data/sitting.obj')
 texture_image = Image.open('data/wood.jpg')
 vertex_shader_source = open('data/shader.vert').read()
 fragment_shader_source = open('data/shader.frag').read()
@@ -102,10 +102,10 @@ prog = ctx.program([vert, frag])
 # Matrices and Uniforms
 
 perspective = matrices.perspective(45.0, 1.0, 0.1, 1000.0)
-lookat = matrices.lookat((-70.0, -260.0, 220.0), (0.0, 0.0, 100.0))
+lookat = matrices.lookat((-85, -180, 140), (0.0, 0.0, 65.0))
 mvp = matrices.create_mvp(perspective, lookat)
 
-prog.uniforms['Light'].value = (-70.0, -260.0, 220.0)
+prog.uniforms['Light'].value = (-140.0, -300.0, 350.0)
 prog.uniforms['Color'].value = (1.0, 1.0, 1.0, 0.25)
 prog.uniforms['Mvp'].write(mvp)
 
