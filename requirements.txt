@@ -1,4 +1,4 @@
-numpy
 Pillow
 ModernGL
 ModernGL.ext.obj
+pyrr

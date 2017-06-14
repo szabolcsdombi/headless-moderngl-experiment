@@ -1,8 +1,7 @@
 import ModernGL
 from ModernGL.ext import obj
 from PIL import Image
-
-import matrices
+from pyrr import Matrix44
 
 # Data files
 
@@ -23,13 +22,18 @@ prog = ctx.program([vert, frag])
 
 # Matrices and Uniforms
 
-perspective = matrices.perspective(45.0, 1.0, 0.1, 1000.0)
-lookat = matrices.lookat((-85, -180, 140), (0.0, 0.0, 65.0))
-mvp = matrices.create_mvp(perspective, lookat)
+perspective = Matrix44.perspective_projection(45.0, 1.0, 0.1, 1000.0)
+lookat = Matrix44.look_at(
+    (-85, -180, 140),
+    (0.0, 0.0, 65.0),
+    (0.0, 0.0, 1.0),
+)
+
+mvp = (perspective.transpose() * lookat.transpose()).transpose()
 
 prog.uniforms['Light'].value = (-140.0, -300.0, 350.0)
 prog.uniforms['Color'].value = (1.0, 1.0, 1.0, 0.25)
-prog.uniforms['Mvp'].write(mvp)
+prog.uniforms['Mvp'].write(mvp.astype('float32').tobytes())
 
 # Texture
 
