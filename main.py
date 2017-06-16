@@ -29,7 +29,7 @@ lookat = Matrix44.look_at(
     (0.0, 0.0, 1.0),
 )
 
-mvp = (perspective.transpose() * lookat.transpose()).transpose()
+mvp = perspective * lookat
 
 prog.uniforms['Light'].value = (-140.0, -300.0, 350.0)
 prog.uniforms['Color'].value = (1.0, 1.0, 1.0, 0.25)
