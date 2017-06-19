@@ -47,18 +47,20 @@ vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_text', 'in_norm'])
 
 # Framebuffers
 
-fbo = ctx.framebuffer(ctx.renderbuffer((512, 512)))
+fbo1 = ctx.framebuffer(ctx.renderbuffer((512, 512), samples=4))
+fbo2 = ctx.framebuffer(ctx.renderbuffer((512, 512)))
 
 # Rendering
 
-fbo.use()
+fbo1.use()
 ctx.enable(ModernGL.DEPTH_TEST)
 ctx.clear(0.9, 0.9, 0.9)
 texture.use()
 vao.render()
 
-# Loading the image using Pillow
+# Downsampling and loading the image using Pillow
 
-data = fbo.read(components=3, alignment=1)
-img = Image.frombytes('RGB', fbo.size, data).transpose(Image.FLIP_TOP_BOTTOM)
+ctx.copy_framebuffer(fbo2, fbo1)
+data = fbo2.read(components=3, alignment=1)
+img = Image.frombytes('RGB', fbo2.size, data).transpose(Image.FLIP_TOP_BOTTOM)
 img.show()
