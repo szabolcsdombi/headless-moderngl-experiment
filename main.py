@@ -47,7 +47,10 @@ vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_text', 'in_norm'])
 
 # Framebuffers
 
-fbo = ctx.framebuffer(ctx.renderbuffer((512, 512)))
+fbo = ctx.framebuffer(
+    ctx.renderbuffer((512, 512)),
+    ctx.depth_renderbuffer((512, 512)),
+)
 
 # Rendering
 
