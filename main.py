@@ -1,11 +1,11 @@
 import ModernGL
-from ModernGL.ext import obj
+from ModernGL.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
 # Data files
 
-vertex_data = obj.load('data/sitting.obj')
+vertex_data = Obj.open('data/sitting.obj').pack()
 texture_image = Image.open('data/wood.jpg')
 vertex_shader_source = open('data/shader.vert').read()
 fragment_shader_source = open('data/shader.frag').read()
@@ -33,7 +33,7 @@ mvp = perspective * lookat
 
 prog.uniforms['Light'].value = (-140.0, -300.0, 350.0)
 prog.uniforms['Color'].value = (1.0, 1.0, 1.0, 0.25)
-prog.uniforms['Mvp'].write(mvp.astype('float32').tobytes())
+prog.uniforms['Mvp'].write(mvp.astype('f4').tobytes())
 
 # Texture
 
@@ -63,5 +63,5 @@ vao.render()
 # Loading the image using Pillow
 
 data = fbo.read(components=3, alignment=1)
-img = Image.frombytes('RGB', fbo.size, data).transpose(Image.FLIP_TOP_BOTTOM)
-img.show()
+img = Image.frombytes('RGB', fbo.size, data, 'raw', 'RGB', 0, -1)
+img.save('output.png')
