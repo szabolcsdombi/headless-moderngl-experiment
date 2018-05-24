@@ -1,11 +1,11 @@
 import ModernGL
-from ModernGL.ext import obj
+from ModernGL.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
 # Data files
 
-vertex_data = obj.load('data/sitting.obj')
+vertex_data = Obj.open('data/sitting.obj').pack()
 texture_image = Image.open('data/wood.jpg')
 vertex_shader_source = open('data/shader.vert').read()
 fragment_shader_source = open('data/shader.frag').read()
