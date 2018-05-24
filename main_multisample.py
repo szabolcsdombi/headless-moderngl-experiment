@@ -16,9 +16,7 @@ ctx = ModernGL.create_standalone_context()
 
 # Shaders
 
-vert = ctx.vertex_shader(vertex_shader_source)
-frag = ctx.fragment_shader(fragment_shader_source)
-prog = ctx.program([vert, frag])
+prog = ctx.program(vertex_shader=vertex_shader_source, fragment_shader=fragment_shader_source)
 
 # Matrices and Uniforms
 
@@ -31,9 +29,9 @@ lookat = Matrix44.look_at(
 
 mvp = perspective * lookat
 
-prog.uniforms['Light'].value = (-140.0, -300.0, 350.0)
-prog.uniforms['Color'].value = (1.0, 1.0, 1.0, 0.25)
-prog.uniforms['Mvp'].write(mvp.astype('float32').tobytes())
+prog['Light'].value = (-140.0, -300.0, 350.0)
+prog['Color'].value = (1.0, 1.0, 1.0, 0.25)
+prog['Mvp'].write(mvp.astype('float32').tobytes())
 
 # Texture
 
@@ -43,7 +41,7 @@ texture.build_mipmaps()
 # Vertex Buffer and Vertex Array
 
 vbo = ctx.buffer(vertex_data)
-vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_text', 'in_norm'])
+vao = ctx.simple_vertex_array(prog, vbo, *['in_vert', 'in_text', 'in_norm'])
 
 # Framebuffers
 
