@@ -1,3 +1,5 @@
+![](https://github.com/yoyonel/Headless-rendering-with-python/workflows/Python%20application/badge.svg)
+
 # Headless 3D rendering with python
 
 Rendering to a [Pillow](https://github.com/python-pillow/Pillow) image using [ModernGL](https://github.com/cprogrammer1994/ModernGL)

@@ -1,0 +1,7 @@
+-r requirements.txt
+pytest
+pytest-xvfb
+# https://pywavelets.readthedocs.io/en/latest/install.html
+PyWavelets
+# http://jmcgeheeiv.github.io/pyfakefs/release/intro.html#installation
+pyfakefs

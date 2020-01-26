@@ -1,4 +1,4 @@
-import ModernGL
+import moderngl as ModernGL
 from ModernGL.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
@@ -16,7 +16,6 @@ ctx = ModernGL.create_standalone_context()
 
 # Shaders
 
-
 prog = ctx.program(vertex_shader=vertex_shader_source, fragment_shader=fragment_shader_source)
 
 # Matrices and Uniforms
@@ -32,7 +31,7 @@ mvp = perspective * lookat
 
 prog['Light'].value = (-140.0, -300.0, 350.0)
 prog['Color'].value = (1.0, 1.0, 1.0, 0.25)
-prog['Mvp'].write(mvp.astype('f4').tobytes())
+prog['Mvp'].write(mvp.astype('float32').tobytes())
 
 # Texture
 
@@ -42,25 +41,31 @@ texture.build_mipmaps()
 # Vertex Buffer and Vertex Array
 
 vbo = ctx.buffer(vertex_data)
-vao = ctx.simple_vertex_array(prog, vbo,* ['in_vert', 'in_text', 'in_norm'])
+vao = ctx.simple_vertex_array(prog, vbo, *['in_vert', 'in_text', 'in_norm'])
 
 # Framebuffers
 
-fbo = ctx.framebuffer(
+fbo1 = ctx.framebuffer(
+    ctx.renderbuffer((512, 512), samples=4),
+    ctx.depth_renderbuffer((512, 512), samples=4),
+)
+
+fbo2 = ctx.framebuffer(
     ctx.renderbuffer((512, 512)),
     ctx.depth_renderbuffer((512, 512)),
 )
 
 # Rendering
 
-fbo.use()
+fbo1.use()
 ctx.enable(ModernGL.DEPTH_TEST)
 ctx.clear(0.9, 0.9, 0.9)
 texture.use()
 vao.render()
 
-# Loading the image using Pillow
+# Downsampling and loading the image using Pillow
 
-data = fbo.read(components=3, alignment=1)
-img = Image.frombytes('RGB', fbo.size, data, 'raw', 'RGB', 0, -1)
-img.save('output.png')
+ctx.copy_framebuffer(fbo2, fbo1)
+data = fbo2.read(components=3, alignment=1)
+img = Image.frombytes('RGB', fbo2.size, data).transpose(Image.FLIP_TOP_BOTTOM)
+img.show()
