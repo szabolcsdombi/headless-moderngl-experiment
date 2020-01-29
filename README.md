@@ -25,6 +25,84 @@ python main.py
 
 [![example](https://raw.githubusercontent.com/cprogrammer1994/Headless-rendering-with-python/master/data/sitting.png)](https://github.com/cprogrammer1994/Headless-rendering-with-python/blob/master/data/sitting.png)
 
+## (Unit) Tests + CI
+
+### Requirements
+
+- [pytest](https://docs.pytest.org/en/latest/)
+- [pytest-xvfb](https://pypi.org/project/pytest-xvfb/)
+- [PyWavelets]( https://pywavelets.readthedocs.io/en/latest)
+- [pyfakefs](https://pypi.org/project/pyfakefs/)
+
+```shell
+pip install -r requirements_dev.txt
+```
+
+### Run the tests
+
+```shell
+Headless-rendering-with-python on  master on 🐳 v19.03.5 (localhost) via py3.7.2_ubuntu-headless-ModernGL via 🐍 py3.7.2_ubuntu-headless-ModernGL 
+➜ PYTHONPATH=. pytest -vvv -s --durations=0
+=================================================================== test session starts ===================================================================
+platform linux -- Python 3.7.2, pytest-5.3.4, py-1.8.1, pluggy-0.13.1 -- /home/latty/.pyenv/versions/3.7.2/envs/py3.7.2_ubuntu-headless-ModernGL/bin/python3.7
+cachedir: .pytest_cache
+rootdir: /c/Users/latty/Prog/__COMPUTER_GRAPHICS__/ubuntu-headless-ModernGL/Headless-rendering-with-python
+plugins: pyfakefs-3.7.1, xvfb-1.2.0
+collected 2 items                                                                                                                                         
+
+tests/test_main.py::test_screen PASSED
+tests/test_main.py::test_main libGL error: failed to create drawable
+libGL error: failed to create drawable
+PASSED
+
+================================================================= slowest test durations ==================================================================
+0.75s call     tests/test_main.py::test_main
+0.08s setup    tests/test_main.py::test_main
+0.00s teardown tests/test_main.py::test_main
+0.00s setup    tests/test_main.py::test_screen
+0.00s teardown tests/test_main.py::test_screen
+0.00s call     tests/test_main.py::test_screen
+==================================================================== 2 passed in 1.27s ====================================================================
+```
+
+### CI: Github-Action
+
+A workflow pipeline is set for a standard python application (running flake8 and pytest):
+- Workflow results can be seen here: [Headless-rendering-with-python/actions](https://github.com/yoyonel/Headless-rendering-with-python/actions)
+- Pipeline configuration can be seen/modified here: [.github/workflows/pythonapp.yml](https://github.com/yoyonel/Headless-rendering-with-python/blob/master/.github/workflows/pythonapp.yml)
+```yaml
+name: Python application
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_dev.txt
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        PYTHONPATH=. pytest
+```
+
 ## The vertex shaders
 
 ```glsl
