@@ -1,4 +1,4 @@
 Pillow
-ModernGL
+moderngl==5.5.4
 ModernGL.ext.obj
 pyrr>=0.8.4
